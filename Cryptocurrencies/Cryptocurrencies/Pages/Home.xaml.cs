@@ -1,5 +1,4 @@
-﻿using Cryptocurrencies.Pages;
-using Cryptocurrencies.ViewModel;
+﻿using Cryptocurrencies.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,24 +14,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-
-namespace Cryptocurrencies
+namespace Cryptocurrencies.Pages
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for Home.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Home : Page
     {
-        public MainWindow()
+        public Home()
         {
             InitializeComponent();
-            NavigateToPage(new Home());
-           
-        }
-        private void NavigateToPage(Page page)
-        {
-            MainFrame.Content = null;
-            MainFrame.Content = page;
+            this.DataContext = new CryptocurrenciesViewModel();
         }
     }
 }
