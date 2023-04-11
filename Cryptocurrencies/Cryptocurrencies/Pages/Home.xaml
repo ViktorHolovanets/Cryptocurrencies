@@ -4,6 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Cryptocurrencies.Pages"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Home">
@@ -13,68 +15,31 @@
             <ToggleButton Content="Перемикач теми" HorizontalAlignment="Right" VerticalAlignment="Top"
                       Command="{Binding ToggleThemeCommand}"/>
         </WrapPanel>
-        <TabControl TabStripPlacement="Bottom">
-            <TabItem IsSelected="True">
-                <TabItem.Header>
-                    Home
-                </TabItem.Header>
-                <Grid>
-                    <DataGrid x:Name="CryptoDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding cryptocurrencies}" IsReadOnly="True" ScrollViewer.CanContentScroll="False"
+        <Grid>
+            <DataGrid x:Name="CryptoDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding Cryptocurrencies}" IsReadOnly="True" ScrollViewer.CanContentScroll="False"
                               ColumnWidth="*" >
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" />
-                            <DataGridTextColumn Header="Rank" Binding="{Binding Rank}" />
-                            <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" />
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                            <DataGridTextColumn Header="Supply" Binding="{Binding Supply}" />
-                            <DataGridTextColumn Header="Max Supply" Binding="{Binding MaxSupply}" />
-                            <DataGridTextColumn Header="Market Cap USD" Binding="{Binding MarketCapUsd}" />
-                            <DataGridTextColumn Header="Volume USD 24Hr" Binding="{Binding VolumeUsd24Hr}" />
-                            <DataGridTextColumn Header="Price USD" Binding="{Binding PriceUsd}" />
-                            <DataGridTextColumn Header="Change Percent 24Hr" Binding="{Binding ChangePercent24Hr}" />
-                            <DataGridTextColumn Header="VWAP 24Hr" Binding="{Binding Vwap24Hr}" />
-                            
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Планувальник" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction
+                                Command="{Binding ToggleThemeCommand}"
+                                CommandParameter="{Binding SelectedCrypto}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" />
+                    <DataGridTextColumn Header="Rank" Binding="{Binding Rank}" />
+                    <DataGridTextColumn Header="Symbol" Binding="{Binding Symbol}" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="Supply" Binding="{Binding Supply}" />
+                    <DataGridTextColumn Header="Max Supply" Binding="{Binding MaxSupply}" />
+                    <DataGridTextColumn Header="Market Cap USD" Binding="{Binding MarketCapUsd}" />
+                    <DataGridTextColumn Header="Volume USD 24Hr" Binding="{Binding VolumeUsd24Hr}" />
+                    <DataGridTextColumn Header="Price USD" Binding="{Binding PriceUsd}" />
+                    <DataGridTextColumn Header="Change Percent 24Hr" Binding="{Binding ChangePercent24Hr}" />
+                    <DataGridTextColumn Header="VWAP 24Hr" Binding="{Binding Vwap24Hr}" />
 
-            </TabItem>
-            <TabItem Header="Статистика">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="33*"/>
-                        <ColumnDefinition Width="15*"/>
-                        <ColumnDefinition Width="207*"/>
-                        <ColumnDefinition Width="511*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.ColumnSpan="3">
-                        <RadioButton Tag="PomodoroDay" >Помодорний день</RadioButton>
-                        <RadioButton Tag="PomodoroMonth" >Помодорний місяць</RadioButton>
-                        <RadioButton Tag="MaxDurationPomodoro" >Найдовший помодор</RadioButton>
-                        <RadioButton Tag="MaxNumberPomodoro" >Найбільша кількість повторень</RadioButton>
-                    </StackPanel>
-                    <ListBox x:Name="lbResultStatistics" Grid.Column="3" Margin="5,5,5,5">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Border>
-                                    <StackPanel>
-                                        <WrapPanel>
-                                            <TextBlock x:Name="tbNameRes" Text="{Binding NameAppendix}" Margin="7" Foreground="Azure"></TextBlock>
-                                            <TextBlock Text="{Binding NameResult}" Margin="7"></TextBlock>
-                                        </WrapPanel>
-                                        <WrapPanel>
-                                            <TextBlock x:Name="tbvalueRes" Text="{Binding ValueAppendix}" Margin="7" Foreground="Azure"></TextBlock>
-                                            <TextBlock Text="{Binding NumberResult}" ToolTip="Кількість повтору" Margin="7"></TextBlock>
-                                        </WrapPanel>
-                                    </StackPanel>
-                                </Border>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
-            </TabItem>
-        </TabControl>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </DockPanel>
 </Page>

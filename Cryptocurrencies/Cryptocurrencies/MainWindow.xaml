@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Cryptocurrencies" xmlns:viewmodel="clr-namespace:Cryptocurrencies.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:CryptocurrenciesViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
    
-    <Grid>
-        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" />
-    </Grid>
+    <DockPanel>
+        <Button Content="Перейти на іншу сторінку" Command="{Binding NavigateCommand}" CommandParameter="{Binding ElementName=MainFrame}"  Width="50" Height="50" DockPanel.Dock="Top"/>
+        <Frame x:Name="MainFrame" Content="{Binding Frame}" NavigationUIVisibility="Hidden" />
+    </DockPanel>
 </Window>

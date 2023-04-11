@@ -1,6 +1,7 @@
 ﻿using Cryptocurrencies.Command;
 using Cryptocurrencies.Pages;
 using Cryptocurrencies.Properties;
+using Cryptocurrencies.Services.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -22,7 +23,7 @@ namespace Cryptocurrencies.ViewModel
 {
     public class CryptocurrenciesViewModel : INotifyPropertyChanged
     {
-        private Model.Cryptocurrencies selectedCrypto;
+        private  Model.Cryptocurrencies selectedCrypto;
         public Model.Cryptocurrencies SelectedCrypto
         {
             get { return selectedCrypto; }
@@ -32,22 +33,26 @@ namespace Cryptocurrencies.ViewModel
                 OnPropertyChanged("SelectedCrypto");
             }
         }
-        public ObservableCollection<Model.Cryptocurrencies> cryptocurrencies { get; set; }=new ObservableCollection<Model.Cryptocurrencies>();
+        private ObservableCollection<Model.Cryptocurrencies> cryptocurrencies;
+        public ObservableCollection<Model.Cryptocurrencies> Cryptocurrencies
+        {
+            get { return cryptocurrencies; }
+            set
+            {
+                cryptocurrencies = value;
+                OnPropertyChanged("Cryptocurrencies"); // Виклик події OnPropertyChanged
+            }
+        }
 
         public CryptocurrenciesViewModel()
         {
             CurrentResources("Theme/DarkTheme");
-            var baseAddress = "https://api.coincap.io/v2/assets";
-            using (var client = new HttpClient())
-            {
-                using (var response = client.GetAsync(baseAddress).Result)
-                {
-                    var customerJsonString = response.Content.ReadAsStringAsync().Result;
-                    var json = JObject.Parse(customerJsonString);
-                    var dataArray = json["data"].ToString();
-                    cryptocurrencies = JsonConvert.DeserializeObject<ObservableCollection<Model.Cryptocurrencies>>(dataArray);
-                }
-            }
+            var  httpClientHelper = new HttpClientHelper();
+            httpClientHelper.Get<ObservableCollection<Model.Cryptocurrencies>>("https://api.coincap.io/v2/assets", met);
+        }
+        private void met(string data)
+        {
+            Cryptocurrencies = JsonConvert.DeserializeObject<ObservableCollection<Model.Cryptocurrencies>>(data);
         }
         private bool isTheme = true;
         private ICommand _toggleThemeCommand;
