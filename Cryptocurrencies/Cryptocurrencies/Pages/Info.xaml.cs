@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Cryptocurrencies.ViewModel;
+using LiveCharts;
+using LiveCharts.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,13 +19,23 @@ using System.Windows.Shapes;
 namespace Cryptocurrencies.Pages
 {
     /// <summary>
-    /// Interaction logic for Page1.xaml
+    /// Interaction logic for Info.xaml
     /// </summary>
-    public partial class Page1 : Page
+    public partial class Info : Page
     {
-        public Page1()
+
+        public Info(string id=null)
         {
             InitializeComponent();
+            if(id != null)
+            {
+                DataContext = new CryptoInfoViewModel(id);
+            }
+        }
+
+        private void LineSeries_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
+
         }
     }
 }

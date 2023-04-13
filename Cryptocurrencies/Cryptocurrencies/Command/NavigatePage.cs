@@ -14,6 +14,19 @@ namespace Cryptocurrencies.Command
 {
     public class NavigatePage : INotifyPropertyChanged
     {
+  
+        private static NavigatePage _instance;
+
+        // existing object stored in the static field.
+        public static NavigatePage GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new NavigatePage();
+            }
+            return _instance;
+        }
+
         private Frame _frame;
         public Frame Frame
         {
@@ -27,17 +40,16 @@ namespace Cryptocurrencies.Command
 
         public ICommand NavigateCommand { get; set; }
 
-        public NavigatePage()
+        private NavigatePage()
         {
             Frame = new Frame();
-            Frame.Navigate(new Page1());
-            // Ініціалізація команди
-            NavigateCommand = new RelayCommand(Navigate);
+            Frame.Navigate(new Home());
+            NavigateCommand = new AsyncRelayCommand(Navigate);
         }
 
-        private void Navigate(object parameter)
+        private async Task Navigate(object parameter)
         {
-            Frame.Navigate(new Home());
+            Frame.Navigate(new Uri($"/Pages/{parameter}.xaml", UriKind.Relative));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

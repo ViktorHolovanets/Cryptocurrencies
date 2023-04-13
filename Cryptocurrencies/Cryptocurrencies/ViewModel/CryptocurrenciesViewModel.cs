@@ -40,25 +40,33 @@ namespace Cryptocurrencies.ViewModel
             set
             {
                 cryptocurrencies = value;
-                OnPropertyChanged("Cryptocurrencies"); // Виклик події OnPropertyChanged
+                OnPropertyChanged("Cryptocurrencies");
             }
         }
 
         public CryptocurrenciesViewModel()
         {
             CurrentResources("Theme/DarkTheme");
-            var  httpClientHelper = new HttpClientHelper();
-            httpClientHelper.Get<ObservableCollection<Model.Cryptocurrencies>>("https://api.coincap.io/v2/assets", met);
+            Loader();
         }
-        private void met(string data)
+        private void Loader()
         {
-            Cryptocurrencies = JsonConvert.DeserializeObject<ObservableCollection<Model.Cryptocurrencies>>(data);
+            Task.Run(() => {
+                var httpClientHelper = new HttpClientHelper();
+                httpClientHelper.Get<ObservableCollection<Model.Cryptocurrencies>>("https://api.coincap.io/v2/assets", data => {
+                    Cryptocurrencies = JsonConvert.DeserializeObject<ObservableCollection<Model.Cryptocurrencies>>(data);
+                });
+            });              
         }
         private bool isTheme = true;
         private ICommand _toggleThemeCommand;
         public ICommand ToggleThemeCommand
         {
-            get { return _toggleThemeCommand ?? (_toggleThemeCommand = new RelayCommand(ToggleTheme)); }
+            get { return _toggleThemeCommand ?? (_toggleThemeCommand = new AsyncRelayCommand(InfoCrypto)); }
+        }
+        private async Task InfoCrypto(object obj=null)
+        {
+            NavigatePage.GetInstance().Frame.Navigate(new Info(SelectedCrypto.Id));
         }
         private void ToggleTheme(object obj)
         {

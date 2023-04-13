@@ -17,6 +17,7 @@ namespace Cryptocurrencies.Services
             _httpClientHelper = new HttpClientHelper();
         }
         public void FullCrypto(Action<string> action) => _httpClientHelper.Get<ObservableCollection<Model.Cryptocurrencies>>("https://api.coincap.io/v2/assets", action);
-        public void MarketsCrypto(Action<string> action, String id) => _httpClientHelper.Get<Markets>($"api.coincap.io/v2/assets/{id}/markets", action);
+        public void MarketsCrypto(Action<string> action, String id) => _httpClientHelper.Get<Markets>($"https://api.coincap.io/v2/assets/{id}/markets", action);
+        public void HistoryCrypto(Action<string> action, String id) => _httpClientHelper.Get<List<PriceData>>($"https://api.coincap.io/v2/assets/{id}/history?interval=d1", action);
     }
 }

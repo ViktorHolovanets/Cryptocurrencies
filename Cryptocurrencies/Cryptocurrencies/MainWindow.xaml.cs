@@ -27,7 +27,7 @@ namespace Cryptocurrencies
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new NavigatePage();
+            this.DataContext =NavigatePage.GetInstance();
 
 
         }

@@ -1,0 +1,41 @@
+﻿<Page x:Class="Cryptocurrencies.Pages.Info"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Cryptocurrencies.Pages"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Info">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.25*"/>
+        </Grid.ColumnDefinitions>
+        <TabControl>
+            <TabItem Header="Markets">
+
+            </TabItem>
+            <TabItem Header="History">
+                <Grid>
+                    <lvc:CartesianChart >
+                        <lvc:CartesianChart.Series>
+                            <lvc:ScatterSeries Title="Ціна (USD)"  StrokeThickness="2"  />
+                        </lvc:CartesianChart.Series>
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Title="Дата" Labels="{Binding Labels}" LabelsRotation="45" />
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="Ціна (USD)" Labels="{Binding ChartValues}"/>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <DockPanel Grid.Column="1" Background="AliceBlue">
+            <TextBlock>Text</TextBlock>
+        </DockPanel>
+    </Grid>
+</Page>

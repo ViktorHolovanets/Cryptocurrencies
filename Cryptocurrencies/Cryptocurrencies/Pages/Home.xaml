@@ -17,7 +17,8 @@
         </WrapPanel>
         <Grid>
             <DataGrid x:Name="CryptoDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding Cryptocurrencies}" IsReadOnly="True" ScrollViewer.CanContentScroll="False"
-                              ColumnWidth="*" >
+                      SelectedItem="{Binding SelectedCrypto}"        
+                      ColumnWidth="*" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction

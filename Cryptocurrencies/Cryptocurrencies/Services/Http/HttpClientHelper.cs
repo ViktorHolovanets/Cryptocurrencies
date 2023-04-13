@@ -48,6 +48,7 @@ namespace Cryptocurrencies.Services.Http
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex.Message);
                 }
             });
         }
