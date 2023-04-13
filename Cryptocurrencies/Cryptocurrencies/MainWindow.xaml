@@ -8,8 +8,7 @@
    
     <DockPanel>
         <WrapPanel DockPanel.Dock="Top">
-            <Button Content="Home" Command="{Binding NavigateCommand}" CommandParameter="Home"  Width="50" Height="50" />
-            <Button Content="Info" Command="{Binding NavigateCommand}" CommandParameter="Info"  Width="50" Height="50" />
+            <Button Content="Home" Command="{Binding NavigateCommand}" CommandParameter="Home"/>
         </WrapPanel>
         
         <Frame x:Name="MainFrame" Content="{Binding Frame}" NavigationUIVisibility="Hidden" />

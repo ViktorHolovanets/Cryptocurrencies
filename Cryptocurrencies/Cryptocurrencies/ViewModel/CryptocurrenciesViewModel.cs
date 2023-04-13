@@ -1,6 +1,7 @@
 ﻿using Cryptocurrencies.Command;
 using Cryptocurrencies.Pages;
 using Cryptocurrencies.Properties;
+using Cryptocurrencies.Repositories;
 using Cryptocurrencies.Services.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -23,7 +24,7 @@ namespace Cryptocurrencies.ViewModel
 {
     public class CryptocurrenciesViewModel : INotifyPropertyChanged
     {
-        private  Model.Cryptocurrencies selectedCrypto;
+        private Model.Cryptocurrencies selectedCrypto;
         public Model.Cryptocurrencies SelectedCrypto
         {
             get { return selectedCrypto; }
@@ -51,29 +52,46 @@ namespace Cryptocurrencies.ViewModel
         }
         private void Loader()
         {
-            Task.Run(() => {
-                var httpClientHelper = new HttpClientHelper();
-                httpClientHelper.Get<ObservableCollection<Model.Cryptocurrencies>>("https://api.coincap.io/v2/assets", data => {
-                    Cryptocurrencies = JsonConvert.DeserializeObject<ObservableCollection<Model.Cryptocurrencies>>(data);
-                });
-            });              
+            Task.Run(async () =>
+            {
+                int count = 0;
+                while (count < 5)
+                {
+                    if (CryptoRepository.GetInstance().Cryptocurrencies != null)
+                    {
+                        Cryptocurrencies = new ObservableCollection<Model.Cryptocurrencies>(CryptoRepository.GetInstance().Cryptocurrencies.Take(10).ToList());
+                        count = 5;
+                    }
+                    else
+                    {
+                        await Task.Delay(2000);
+                        count++;
+                    }
+                }
+            });
         }
         private bool isTheme = true;
         private ICommand _toggleThemeCommand;
         public ICommand ToggleThemeCommand
         {
-            get { return _toggleThemeCommand ?? (_toggleThemeCommand = new AsyncRelayCommand(InfoCrypto)); }
+            get { return _toggleThemeCommand ?? (_toggleThemeCommand = new AsyncRelayCommand(ToggleTheme)); }
         }
-        private async Task InfoCrypto(object obj=null)
+       
+        private ICommand infoCommand;
+        public ICommand InfoCommand
+        {
+            get { return infoCommand ?? (infoCommand = new AsyncRelayCommand(InfoCrypto)); }
+        }
+        private async Task InfoCrypto(object obj = null)
         {
             NavigatePage.GetInstance().Frame.Navigate(new Info(SelectedCrypto.Id));
         }
-        private void ToggleTheme(object obj)
+        private async Task ToggleTheme(object obj)
         {
-            
+
             if (isTheme)
             {
-                CurrentResources("Theme/LightTheme");              
+                CurrentResources("Theme/LightTheme");
             }
             else
             {
@@ -81,11 +99,20 @@ namespace Cryptocurrencies.ViewModel
             }
             isTheme = !isTheme;
         }
+        private ICommand allCryptoCommand;
+        public ICommand AllCryptoCommand
+        {
+            get { return allCryptoCommand ?? (allCryptoCommand = new AsyncRelayCommand(AllInfoCrypto)); }
+        }
+        private async Task AllInfoCrypto(object obj = null)
+        {
+            Cryptocurrencies = new ObservableCollection<Model.Cryptocurrencies>(CryptoRepository.GetInstance().Cryptocurrencies.ToList());
+        }
         private void CurrentResources(string style)
         {
-            var uri = new Uri(style + ".xaml", UriKind.Relative);          
-            ResourceDictionary resourceDict = Application.LoadComponent(uri) as ResourceDictionary;          
-            Application.Current.Resources.Clear();           
+            var uri = new Uri(style + ".xaml", UriKind.Relative);
+            ResourceDictionary resourceDict = Application.LoadComponent(uri) as ResourceDictionary;
+            Application.Current.Resources.Clear();
             Application.Current.Resources.MergedDictionaries.Add(resourceDict);
 
         }

@@ -1,6 +1,9 @@
 ﻿using Cryptocurrencies.Pages;
+using Cryptocurrencies.Services.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -26,7 +29,8 @@ namespace Cryptocurrencies.Command
             }
             return _instance;
         }
-
+       
+        
         private Frame _frame;
         public Frame Frame
         {
@@ -37,7 +41,7 @@ namespace Cryptocurrencies.Command
                 OnPropertyChanged(nameof(Frame));
             }
         }
-
+        
         public ICommand NavigateCommand { get; set; }
 
         private NavigatePage()

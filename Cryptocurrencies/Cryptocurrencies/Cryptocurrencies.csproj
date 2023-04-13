@@ -85,14 +85,16 @@
     <Compile Include="Command\AsyncRelayCommand.cs" />
     <Compile Include="Command\NavigatePage.cs" />
     <Compile Include="Command\RelayCommand.cs" />
-    <Compile Include="Model\Markets.cs" />
+    <Compile Include="Model\Market.cs" />
     <Compile Include="Model\PriceData.cs" />
+    <Compile Include="Model\Rate.cs" />
     <Compile Include="Pages\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Info.xaml.cs">
       <DependentUpon>Info.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\CryptoRepository.cs" />
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Services\Http\HttpClientHelper.cs" />
     <Compile Include="ViewModel\CryptocurrenciesViewModel.cs" />

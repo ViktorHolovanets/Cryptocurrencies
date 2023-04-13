@@ -12,12 +12,14 @@ namespace Cryptocurrencies.Services
     public class CryptoService
     {
         private HttpClientHelper _httpClientHelper;
+        private string baseUrl { get; set; } = "https://api.coincap.io/v2";
         public CryptoService()
         {
             _httpClientHelper = new HttpClientHelper();
         }
-        public void FullCrypto(Action<string> action) => _httpClientHelper.Get<ObservableCollection<Model.Cryptocurrencies>>("https://api.coincap.io/v2/assets", action);
-        public void MarketsCrypto(Action<string> action, String id) => _httpClientHelper.Get<Markets>($"https://api.coincap.io/v2/assets/{id}/markets", action);
-        public void HistoryCrypto(Action<string> action, String id) => _httpClientHelper.Get<List<PriceData>>($"https://api.coincap.io/v2/assets/{id}/history?interval=d1", action);
+        public void FullCrypto(Action<string> action) => _httpClientHelper.Get<List<Model.Cryptocurrencies>>($"{baseUrl}/assets", action);
+        public void MarketsCrypto(Action<string> action, String id) => _httpClientHelper.Get<List<Market>>($"{baseUrl}/assets/{id}/markets", action);
+        public void HistoryCrypto(Action<string> action, String id) => _httpClientHelper.Get<List<PriceData>>($"{baseUrl}/assets/{id}/history?interval=d1", action);
+        public void RaresCrypto(Action<string> action) => _httpClientHelper.Get<List<Rate>>($"{baseUrl}/rates", action);
     }
 }

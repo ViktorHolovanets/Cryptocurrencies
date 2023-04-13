@@ -16,19 +16,37 @@
         </Grid.ColumnDefinitions>
         <TabControl>
             <TabItem Header="Markets">
-
+                <lvc:CartesianChart Series="{Binding SeriesMarketsCollection}" Grid.Row="1">
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Labels="{Binding LabelsMarkets}" LabelsRotation="15" />
+                    </lvc:CartesianChart.AxisX>
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis Title="Price (USD)" />
+                    </lvc:CartesianChart.AxisY>
+                </lvc:CartesianChart>
             </TabItem>
             <TabItem Header="History">
                 <Grid>
-                    <lvc:CartesianChart >
-                        <lvc:CartesianChart.Series>
-                            <lvc:ScatterSeries Title="Ціна (USD)"  StrokeThickness="2"  />
-                        </lvc:CartesianChart.Series>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="27*"/>
+                        <ColumnDefinition Width="607*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.2*"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <WrapPanel Grid.ColumnSpan="2">
+                        <Label>Period</Label>
+                        <DatePicker SelectedDate="{Binding SelectedStartDate, Mode=TwoWay}"/>
+                        <DatePicker SelectedDate="{Binding SelectedEndDate, Mode=TwoWay}"/>
+                        <Button Command="{Binding ViewPeriod}">🔍</Button>
+                    </WrapPanel>
+                    <lvc:CartesianChart Series="{Binding SeriesCollection}" Grid.ColumnSpan="2" Margin="0,70,0,0" Grid.RowSpan="2">
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Title="Дата" Labels="{Binding Labels}" LabelsRotation="45" />
+                            <lvc:Axis Labels="{Binding Labels}" LabelsRotation="15" />
                         </lvc:CartesianChart.AxisX>
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Ціна (USD)" Labels="{Binding ChartValues}"/>
+                            <lvc:Axis Title="Price (USD)" />
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
                 </Grid>

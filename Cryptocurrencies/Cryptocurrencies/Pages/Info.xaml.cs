@@ -32,10 +32,5 @@ namespace Cryptocurrencies.Pages
                 DataContext = new CryptoInfoViewModel(id);
             }
         }
-
-        private void LineSeries_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
-        {
-
-        }
     }
 }

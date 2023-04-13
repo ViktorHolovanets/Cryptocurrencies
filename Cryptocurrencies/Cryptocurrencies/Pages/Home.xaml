@@ -14,6 +14,7 @@
         <WrapPanel Margin="5" DockPanel.Dock="Top">
             <ToggleButton Content="Перемикач теми" HorizontalAlignment="Right" VerticalAlignment="Top"
                       Command="{Binding ToggleThemeCommand}"/>
+            <Button Command="{Binding AllCryptoCommand}">All Crypto</Button>
         </WrapPanel>
         <Grid>
             <DataGrid x:Name="CryptoDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding Cryptocurrencies}" IsReadOnly="True" ScrollViewer.CanContentScroll="False"
@@ -22,7 +23,7 @@
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction
-                                Command="{Binding ToggleThemeCommand}"
+                                Command="{Binding InfoCommand}"
                                 CommandParameter="{Binding SelectedCrypto}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
