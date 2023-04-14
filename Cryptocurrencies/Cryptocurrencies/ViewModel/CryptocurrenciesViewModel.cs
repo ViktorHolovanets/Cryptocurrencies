@@ -71,18 +71,18 @@ namespace Cryptocurrencies.ViewModel
                     NavigatePage.GetInstance().Frame.Navigate(new Info(SelectedCrypto.Id));
             }
             catch (Exception)
-            {}
+            { }
         }
 
-        private ICommand allCryptoCommand;
-        public ICommand AllCryptoCommand
-        {
-            get { return allCryptoCommand ?? (allCryptoCommand = new AsyncRelayCommand(AllInfoCrypto)); }
-        }
-        private async Task AllInfoCrypto(object obj = null)
-        {
-            Cryptocurrencies = new ObservableCollection<Model.Cryptocurrencies>(CryptoRepository.GetInstance().Cryptocurrencies.ToList());
-        }
+        //private ICommand allCryptoCommand;
+        //public ICommand AllCryptoCommand
+        //{
+        //    get { return allCryptoCommand ?? (allCryptoCommand = new AsyncRelayCommand(AllInfoCrypto)); }
+        //}
+        //private async Task AllInfoCrypto(object obj = null)
+        //{
+        //    Cryptocurrencies = new ObservableCollection<Model.Cryptocurrencies>(CryptoRepository.GetInstance().Cryptocurrencies.ToList());
+        //}
         private string searchCrypto;
         public string SearchCrypto
         {
@@ -100,12 +100,60 @@ namespace Cryptocurrencies.ViewModel
             get { return findCryptoCommand ?? (findCryptoCommand = new AsyncRelayCommand(SearchResult)); }
         }
         private async Task SearchResult(object obj)
-        { 
+        {
             Cryptocurrencies = new ObservableCollection<Model.Cryptocurrencies>(CryptoRepository.GetInstance().Cryptocurrencies.Where(c =>
             c.Name.ToLower().Contains(SearchCrypto) ||
             c.Symbol.ToLower().Contains(SearchCrypto))
             .ToList());
         }
+
+        private bool isTrueChecked;
+        public bool IsTrueChecked
+        {
+            get { return isTrueChecked; }
+            set
+            {
+                if (isTrueChecked != value)
+                {
+                    isTrueChecked = value;
+                    OnPropertyChanged(); // Виклик методу для повідомлення про зміну властивості
+                }
+            }
+        }
+        private ICommand checkedInfoCommand;
+        public ICommand CheckedInfoCommand
+        {
+            get { return checkedInfoCommand ?? (checkedInfoCommand = new AsyncRelayCommand(Checked, CanExecuteChecked)); }
+        }
+
+        private bool isCommandExecuting;
+        private bool CanExecuteChecked()
+        {
+            return !isCommandExecuting; // Перевірка, чи команда не виконується
+        }
+        private async Task Checked(object obj)
+        {
+            try
+            {
+                isCommandExecuting = true; // Встановлення статусу виконання команди
+                OnPropertyChanged(nameof(CheckedInfoCommand)); // Повідомлення про можливість виконання команди
+                                                               // Ваша довготривала асинхронна операція тут
+                if (IsTrueChecked)
+                {
+                    Cryptocurrencies = new ObservableCollection<Model.Cryptocurrencies>(CryptoRepository.GetInstance().Cryptocurrencies.ToList());
+                }
+                else
+                    Cryptocurrencies = new ObservableCollection<Model.Cryptocurrencies>(CryptoRepository.GetInstance().Cryptocurrencies.Take(10).ToList());
+            }
+            finally
+            {
+                isCommandExecuting = false; // Зняття статусу виконання команди
+                OnPropertyChanged(nameof(CheckedInfoCommand)); // Повідомлення про можливість виконання команди
+            }
+        }
+
+
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {

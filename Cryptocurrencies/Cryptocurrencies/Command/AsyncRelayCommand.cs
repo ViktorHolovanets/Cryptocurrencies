@@ -12,6 +12,8 @@ namespace Cryptocurrencies.Command
         private readonly Func<object, Task> _execute;
         private readonly Func<bool> _canExecute;
 
+        private bool _isExecuting;
+
         public AsyncRelayCommand(Func<object, Task> execute) : this(execute, null)
         {
         }
@@ -30,12 +32,25 @@ namespace Cryptocurrencies.Command
 
         public bool CanExecute(object parameter)
         {
-            return _canExecute?.Invoke() ?? true;
+            return !_isExecuting && (_canExecute?.Invoke() ?? true);
         }
 
         public async void Execute(object parameter)
         {
-            await _execute(parameter);
+            if (_isExecuting)
+                return;
+
+            try
+            {
+                _isExecuting = true; 
+                CommandManager.InvalidateRequerySuggested();
+                await _execute(parameter);
+            }
+            finally
+            {
+                _isExecuting = false; 
+                CommandManager.InvalidateRequerySuggested();
+            }
         }
     }
 }

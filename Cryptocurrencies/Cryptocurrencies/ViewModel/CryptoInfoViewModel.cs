@@ -21,9 +21,9 @@ namespace Cryptocurrencies.ViewModel
     public class CryptoInfoViewModel : INotifyPropertyChanged
     {
         public string Id { get; set; }
-        public Model.Cryptocurrencies CurrentCrypto { get;set; }
-        public Model.Cryptocurrencies SelectCrypto { get;set; }
-        public List<Model.Cryptocurrencies> DB { get;set; }
+        public Model.Cryptocurrencies CurrentCrypto { get; set; }
+        public Model.Cryptocurrencies SelectCrypto { get; set; }
+        public List<Model.Cryptocurrencies> DB { get; set; }
         private List<PriceData> priceDataList;
         public SeriesCollection SeriesCollection { get; set; }
         public List<string> Labels { get; set; }
@@ -42,7 +42,19 @@ namespace Cryptocurrencies.ViewModel
                 }
             }
         }
-
+        private string resultExchange;
+        public string ResultExchange
+        {
+            get { return resultExchange; }
+            set
+            {
+                if (resultExchange != value)
+                {
+                    resultExchange = value;
+                    OnPropertyChanged("ResultExchange");
+                }
+            }
+        }
         private DateTime selectedEndDate;
         public DateTime SelectedEndDate
         {
@@ -63,13 +75,13 @@ namespace Cryptocurrencies.ViewModel
             Load();
             ViewPeriod = new RelayCommand(ExecuteViewPeriod);
             DB = CryptoRepository.GetInstance().Cryptocurrencies;
-            CurrentCrypto = DB.FirstOrDefault(cr=>cr.Id==id);
+            CurrentCrypto = DB.FirstOrDefault(cr => cr.Id == id);
         }
         public void Load()
         {
             var client = new CryptoService();
             client.MarketsCrypto(data =>
-            {               
+            {
                 var priceMarkets = JsonConvert.DeserializeObject<List<Market>>(data);
                 if (priceMarkets != null && priceMarkets.Count > 0)
                 {
@@ -87,9 +99,6 @@ namespace Cryptocurrencies.ViewModel
                     Application.Current.Dispatcher.Invoke(() => LoaderHistory(dataPrice));
                 }
             }, Id);
-
-
-
         }
         public void LoaderHistory(List<PriceData> priceDataList)
         {
@@ -123,12 +132,35 @@ namespace Cryptocurrencies.ViewModel
             OnPropertyChanged(nameof(SeriesMarketsCollection));
             OnPropertyChanged(nameof(LabelsMarkets));
         }
+        private string itemsCountCrypto;
+        public string ItemsCountCrypto
+        {
+            get { return itemsCountCrypto; }
+            set
+            {
+                if (itemsCountCrypto != value)
+                {
+                    itemsCountCrypto = value;
+                    OnPropertyChanged("ItemsCountCrypto");
+                }
+            }
+        }
         public ICommand ViewPeriod { get; }
         private void ExecuteViewPeriod(object parameter)
         {
             LoaderHistory(PriceData.GetPriceDataBetweenDates(priceDataList, SelectedStartDate, SelectedEndDate));
         }
 
+        private ICommand resultExchangeCommand;
+        public ICommand ResultExchangeCommand
+        {
+            get { return resultExchangeCommand ?? (resultExchangeCommand = new AsyncRelayCommand(Exchange)); }
+        }
+        private async Task Exchange(object obj)
+        {
+            decimal exchangedAmount = int.Parse(ItemsCountCrypto) * CurrentCrypto.PriceUsd / SelectCrypto.PriceUsd;
+            ResultExchange = $"{exchangedAmount.ToString("0.00000")} {SelectCrypto.Symbol}";
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

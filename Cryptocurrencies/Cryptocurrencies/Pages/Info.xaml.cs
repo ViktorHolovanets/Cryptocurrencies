@@ -32,5 +32,15 @@ namespace Cryptocurrencies.Pages
                 DataContext = new CryptoInfoViewModel(id);
             }
         }
+
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !IsValid(((TextBox)sender).Text + e.Text);
+        }
+        public static bool IsValid(string str)
+        {
+            int i;
+            return int.TryParse(str, out i);
+        }
     }
 }

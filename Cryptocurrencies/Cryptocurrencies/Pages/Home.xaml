@@ -9,21 +9,21 @@
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="1200"
       Title="Home">
-    
+
     <DockPanel>
-        <WrapPanel Margin="5" DockPanel.Dock="Top">
-            <Button Command="{Binding AllCryptoCommand}">All Crypto</Button>
-            <Label>Search</Label>
-            <TextBox Text="{Binding SearchCrypto,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="TextChanged">
-                        <i:InvokeCommandAction
-                    Command="{Binding FindCryptoCommand}"
-                    />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
-        </WrapPanel>
+        <UniformGrid Columns="2" Rows="1" Margin="5" DockPanel.Dock="Top">
+            <CheckBox Content="All Crypto" IsChecked="{Binding IsTrueChecked, Mode=TwoWay}" Command="{Binding CheckedInfoCommand}" Margin="5"/>
+            <WrapPanel HorizontalAlignment="Right">
+                <Label Content="Search" Margin="5"/>
+                <TextBox Text="{Binding SearchCrypto, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" MinWidth="250">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction Command="{Binding FindCryptoCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+            </WrapPanel>
+        </UniformGrid>
         <Grid>
             <DataGrid x:Name="CryptoDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding Cryptocurrencies}" IsReadOnly="True" ScrollViewer.CanContentScroll="False"
                       SelectedItem="{Binding SelectedCrypto}"        
