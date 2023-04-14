@@ -48,6 +48,7 @@ namespace Cryptocurrencies.Command
         {
             Frame = new Frame();
             Frame.Navigate(new Home());
+            CurrentResources("Theme/DarkTheme");
             NavigateCommand = new AsyncRelayCommand(Navigate);
         }
 
@@ -55,7 +56,25 @@ namespace Cryptocurrencies.Command
         {
             Frame.Navigate(new Uri($"/Pages/{parameter}.xaml", UriKind.Relative));
         }
-
+        private bool isTheme = true;
+        private ICommand _toggleThemeCommand;
+        public ICommand ToggleThemeCommand
+        {
+            get { return _toggleThemeCommand ?? (_toggleThemeCommand = new AsyncRelayCommand(ToggleTheme)); }
+        }
+        private async Task ToggleTheme(object obj)
+        {
+            var theme = isTheme ? CurrentResources("Theme/LightTheme") : CurrentResources("Theme/DarkTheme");
+            isTheme = !isTheme;
+        }
+        private bool CurrentResources(string style)
+        {
+            var uri = new Uri(style + ".xaml", UriKind.Relative);
+            ResourceDictionary resourceDict = Application.LoadComponent(uri) as ResourceDictionary;
+            Application.Current.Resources.Clear();
+            Application.Current.Resources.MergedDictionaries.Add(resourceDict);
+            return true;
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {

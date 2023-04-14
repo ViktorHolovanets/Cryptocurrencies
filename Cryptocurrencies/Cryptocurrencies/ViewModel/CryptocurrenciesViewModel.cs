@@ -1,24 +1,13 @@
 ﻿using Cryptocurrencies.Command;
 using Cryptocurrencies.Pages;
-using Cryptocurrencies.Properties;
 using Cryptocurrencies.Repositories;
-using Cryptocurrencies.Services.Http;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Runtime.Remoting.Contexts;
-using System.Security.Policy;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Cryptocurrencies.ViewModel
 {
@@ -47,7 +36,6 @@ namespace Cryptocurrencies.ViewModel
 
         public CryptocurrenciesViewModel()
         {
-            CurrentResources("Theme/DarkTheme");
             Loader();
         }
         private void Loader()
@@ -70,13 +58,6 @@ namespace Cryptocurrencies.ViewModel
                 }
             });
         }
-        private bool isTheme = true;
-        private ICommand _toggleThemeCommand;
-        public ICommand ToggleThemeCommand
-        {
-            get { return _toggleThemeCommand ?? (_toggleThemeCommand = new AsyncRelayCommand(ToggleTheme)); }
-        }
-       
         private ICommand infoCommand;
         public ICommand InfoCommand
         {
@@ -84,21 +65,15 @@ namespace Cryptocurrencies.ViewModel
         }
         private async Task InfoCrypto(object obj = null)
         {
-            NavigatePage.GetInstance().Frame.Navigate(new Info(SelectedCrypto.Id));
+            try
+            {
+                if (obj != null)
+                    NavigatePage.GetInstance().Frame.Navigate(new Info(SelectedCrypto.Id));
+            }
+            catch (Exception)
+            {}
         }
-        private async Task ToggleTheme(object obj)
-        {
 
-            if (isTheme)
-            {
-                CurrentResources("Theme/LightTheme");
-            }
-            else
-            {
-                CurrentResources("Theme/DarkTheme");
-            }
-            isTheme = !isTheme;
-        }
         private ICommand allCryptoCommand;
         public ICommand AllCryptoCommand
         {
@@ -108,13 +83,28 @@ namespace Cryptocurrencies.ViewModel
         {
             Cryptocurrencies = new ObservableCollection<Model.Cryptocurrencies>(CryptoRepository.GetInstance().Cryptocurrencies.ToList());
         }
-        private void CurrentResources(string style)
+        private string searchCrypto;
+        public string SearchCrypto
         {
-            var uri = new Uri(style + ".xaml", UriKind.Relative);
-            ResourceDictionary resourceDict = Application.LoadComponent(uri) as ResourceDictionary;
-            Application.Current.Resources.Clear();
-            Application.Current.Resources.MergedDictionaries.Add(resourceDict);
+            get { return searchCrypto; }
+            set
+            {
+                searchCrypto = value;
+                OnPropertyChanged("SearchCrypto");
+            }
+        }
 
+        private ICommand findCryptoCommand;
+        public ICommand FindCryptoCommand
+        {
+            get { return findCryptoCommand ?? (findCryptoCommand = new AsyncRelayCommand(SearchResult)); }
+        }
+        private async Task SearchResult(object obj)
+        { 
+            Cryptocurrencies = new ObservableCollection<Model.Cryptocurrencies>(CryptoRepository.GetInstance().Cryptocurrencies.Where(c =>
+            c.Name.ToLower().Contains(SearchCrypto) ||
+            c.Symbol.ToLower().Contains(SearchCrypto))
+            .ToList());
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")

@@ -1,5 +1,6 @@
 ﻿using Cryptocurrencies.Command;
 using Cryptocurrencies.Model;
+using Cryptocurrencies.Repositories;
 using Cryptocurrencies.Services;
 using Cryptocurrencies.Services.Http;
 using LiveCharts;
@@ -20,6 +21,9 @@ namespace Cryptocurrencies.ViewModel
     public class CryptoInfoViewModel : INotifyPropertyChanged
     {
         public string Id { get; set; }
+        public Model.Cryptocurrencies CurrentCrypto { get;set; }
+        public Model.Cryptocurrencies SelectCrypto { get;set; }
+        public List<Model.Cryptocurrencies> DB { get;set; }
         private List<PriceData> priceDataList;
         public SeriesCollection SeriesCollection { get; set; }
         public List<string> Labels { get; set; }
@@ -58,6 +62,8 @@ namespace Cryptocurrencies.ViewModel
             Id = id;
             Load();
             ViewPeriod = new RelayCommand(ExecuteViewPeriod);
+            DB = CryptoRepository.GetInstance().Cryptocurrencies;
+            CurrentCrypto = DB.FirstOrDefault(cr=>cr.Id==id);
         }
         public void Load()
         {
