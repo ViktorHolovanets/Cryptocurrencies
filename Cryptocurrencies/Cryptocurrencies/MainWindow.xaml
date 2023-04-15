@@ -9,8 +9,8 @@
     <DockPanel>
         <WrapPanel DockPanel.Dock="Top">
             <Button Content="Home" Command="{Binding NavigateCommand}" CommandParameter="Home" />
-            <ToggleButton Content="Перемикач теми" HorizontalAlignment="Right" VerticalAlignment="Top"
-                      Command="{Binding ToggleThemeCommand}"/>
+          
+            <CheckBox x:Name="cbIsAutoPause" Style="{DynamicResource CheckBoxStyle1}" Command="{Binding ToggleThemeCommand}" Margin="0,0,0,10"></CheckBox>
         </WrapPanel>
         
         <Frame x:Name="MainFrame" Content="{Binding Frame}" NavigationUIVisibility="Hidden" />

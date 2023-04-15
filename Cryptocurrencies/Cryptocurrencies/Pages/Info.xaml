@@ -69,7 +69,7 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button Width="Auto" HorizontalContentAlignment="Stretch" Command="{Binding ResultExchangeCommand}" Content="💱" />
+                <Button  HorizontalContentAlignment="Center" Command="{Binding ResultExchangeCommand}" Content="💱" Margin="10" MinWidth="50"/>
                 <TextBlock Text="{Binding ResultExchange}" FontSize="25"></TextBlock>
             </StackPanel>
             
