@@ -132,7 +132,7 @@ namespace Cryptocurrencies.ViewModel
             OnPropertyChanged(nameof(SeriesMarketsCollection));
             OnPropertyChanged(nameof(LabelsMarkets));
         }
-        private string itemsCountCrypto;
+        private string itemsCountCrypto="1";
         public string ItemsCountCrypto
         {
             get { return itemsCountCrypto; }
@@ -158,8 +158,12 @@ namespace Cryptocurrencies.ViewModel
         }
         private async Task Exchange(object obj)
         {
-            decimal exchangedAmount = int.Parse(ItemsCountCrypto) * CurrentCrypto.PriceUsd / SelectCrypto.PriceUsd;
-            ResultExchange = $"{exchangedAmount.ToString("0.00000")} {SelectCrypto.Symbol}";
+            int result;
+            if(SelectCrypto!=null&& int.TryParse(ItemsCountCrypto, out result))
+            {
+                decimal exchangedAmount = result * CurrentCrypto.PriceUsd / SelectCrypto.PriceUsd;
+                ResultExchange = $"{exchangedAmount.ToString("0.00000")} {SelectCrypto.Symbol}";
+            }            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

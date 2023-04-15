@@ -23,16 +23,30 @@
     <Style TargetType="DockPanel">
         <Setter Property="Background" Value="{StaticResource BlackBrush}"/>
     </Style>
-
-    <Style  TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource DarkGrayBrush}"/>
+    <Style TargetType="CheckBox">
+        <Setter Property="Foreground" Value="{StaticResource RedBrush}"/>
+    </Style>
+    <Style TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource RedBrush}"/>
+    </Style>
+    <Style TargetType="Button">
         <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{StaticResource DarkGrayBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Background3}"/>
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="FontFamily" Value="Arial"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="10" Background="{TemplateBinding Background}" Padding="5">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
@@ -45,7 +59,10 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
+
+
+
 
     <Style TargetType="DataGrid">
         <Setter Property="Background" Value="{StaticResource BlackBrush}"/>
@@ -120,7 +137,7 @@
                     </ControlTemplate.Resources>
 
 
-                    <DockPanel x:Name="dockPanel" ClipToBounds="True">
+                    <DockPanel x:Name="dockPanel" ClipToBounds="True" Margin="5">
                         <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" ContentTemplate="{TemplateBinding ContentTemplate}" RecognizesAccessKey="True" VerticalAlignment="Center"/>
                         <Border CornerRadius="5" Background="{StaticResource WhiteBrush}">
                             <Grid Margin="5,5,0,5" Width="50" >
@@ -145,7 +162,6 @@
                             </Grid>
                         </Border>
                     </DockPanel>
-
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Trigger.EnterActions>
